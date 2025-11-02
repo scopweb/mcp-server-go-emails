@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "email": {
+      "command": "C:\\path\\to\\your\\mcp-server-go-emails\\email-mcp-server.exe",
+      "args": [],
+      "env": {
+        "EMAIL_USERNAME": "your-email@example.com",
+        "EMAIL_PASSWORD": "your-app-password",
+        "IMAP_HOST": "imap.gmail.com",
+        "IMAP_PORT": "993",
+        "SMTP_HOST": "smtp.gmail.com",
+        "SMTP_PORT": "587",
+        "USE_STARTTLS": "true"
+      }
+    }
+  }
+}

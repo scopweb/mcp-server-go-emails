@@ -1,0 +1,29 @@
+{
+  "personal": {
+    "IMAPHost": "imap.gmail.com",
+    "IMAPPort": 993,
+    "SMTPHost": "smtp.gmail.com",
+    "SMTPPort": 587,
+    "Username": "yourpersonal@gmail.com",
+    "Password": "your_app_password_here",
+    "UseStartTLS": true
+  },
+  "work": {
+    "IMAPHost": "outlook.office365.com",
+    "IMAPPort": 993,
+    "SMTPHost": "smtp-mail.outlook.com",
+    "SMTPPort": 587,
+    "Username": "yourwork@company.com",
+    "Password": "your_app_password_here",
+    "UseStartTLS": true
+  },
+  "secondary": {
+    "IMAPHost": "imap.mail.yahoo.com",
+    "IMAPPort": 993,
+    "SMTPHost": "smtp.mail.yahoo.com",
+    "SMTPPort": 587,
+    "Username": "yoursecondary@yahoo.com",
+    "Password": "your_app_password_here",
+    "UseStartTLS": true
+  }
+}
