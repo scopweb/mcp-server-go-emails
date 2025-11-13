@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	// TODO: Uncomment when dependency is available
-	// _ "modernc.org/sqlite"
+	// SQLite driver - Install with: go get modernc.org/sqlite@v1.28.0
+	_ "modernc.org/sqlite"
 )
 
 //go:embed schema.sql

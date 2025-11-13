@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "version": "1.0",
+  "ai": {
+    "provider": "anthropic",
+    "model": "claude-3-5-sonnet-20241022",
+    "api_key_env": "CLAUDE_API_KEY",
+    "max_tokens": 1024,
+    "temperature": 0.3,
+    "timeout_seconds": 30
+  },
+  "classification": {
+    "enabled": true,
+    "fallback_to_rules": true,
+    "confidence_threshold": 0.7,
+    "cache": {
+      "enabled": true,
+      "ttl_hours": 24
+    },
+    "rate_limiting": {
+      "requests_per_minute": 50,
+      "burst": 10
+    },
+    "prompt_template": "Classify the following email into one of these categories: work, personal, promotions, invoice, newsletter, urgent.\n\nEmail details:\nFrom: {{.From}}\nSubject: {{.Subject}}\nSnippet: {{.Snippet}}\n\nRespond with JSON: {\"category\": \"<category>\", \"confidence\": <0-1>, \"reasoning\": \"<brief explanation>\"}"
+  },
+  "summarization": {
+    "enabled": true,
+    "styles": {
+      "brief": {
+        "max_tokens": 256,
+        "temperature": 0.3,
+        "instructions": "Provide a brief 2-3 sentence summary focusing on key points and action items."
+      },
+      "detailed": {
+        "max_tokens": 512,
+        "temperature": 0.3,
+        "instructions": "Provide a comprehensive summary with all important details, categorized by topic."
+      },
+      "executive": {
+        "max_tokens": 384,
+        "temperature": 0.3,
+        "instructions": "Provide an executive summary highlighting only critical information, decisions needed, and key metrics."
+      }
+    },
+    "default_style": "detailed",
+    "cache": {
+      "enabled": true,
+      "ttl_hours": 1
+    }
+  },
+  "embeddings": {
+    "enabled": false,
+    "provider": "openai",
+    "model": "text-embedding-3-small",
+    "dimensions": 1536,
+    "batch_size": 100,
+    "cache": {
+      "enabled": true,
+      "ttl_days": 30
+    }
+  },
+  "templates": {
+    "response_suggestions": {
+      "enabled": true,
+      "max_suggestions": 3,
+      "prompt_template": "Based on this email, suggest {{.MaxSuggestions}} brief professional responses.\n\nEmail:\nFrom: {{.From}}\nSubject: {{.Subject}}\nBody: {{.Body}}\n\nProvide responses in JSON array format with 'tone' (formal/casual) and 'text' fields."
+    }
+  },
+  "cost_control": {
+    "daily_budget_usd": 10.0,
+    "alert_threshold": 0.8,
+    "stop_on_limit": false,
+    "track_costs": true
+  },
+  "fallback": {
+    "on_error": "use_rules",
+    "on_rate_limit": "queue",
+    "on_timeout": "use_cache_or_rules",
+    "retry": {
+      "max_attempts": 3,
+      "backoff_seconds": [1, 2, 4]
+    }
+  },
+  "privacy": {
+    "send_full_body": false,
+    "max_snippet_length": 500,
+    "redact_patterns": [
+      "\\b\\d{3}-\\d{2}-\\d{4}\\b",
+      "\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b"
+    ],
+    "log_prompts": false,
+    "log_responses": false
+  },
+  "features": {
+    "semantic_search": {
+      "enabled": false,
+      "requires": ["embeddings"]
+    },
+    "thread_detection": {
+      "enabled": true,
+      "similarity_threshold": 0.8
+    },
+    "duplicate_detection": {
+      "enabled": true,
+      "similarity_threshold": 0.95
+    },
+    "sentiment_analysis": {
+      "enabled": false,
+      "categories": ["positive", "neutral", "negative", "urgent"]
+    }
+  }
+}
