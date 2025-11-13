@@ -15,6 +15,9 @@ import (
 
 	"github.com/emersion/go-imap"
 	"github.com/emersion/go-imap/client"
+
+	// Intelligent email components
+	"email-mcp-server/server"
 )
 
 // Load .env file
@@ -132,8 +135,9 @@ type SenderCount struct {
 }
 
 type EmailServer struct {
-	configs        []EmailConfig
-	defaultAccount string
+	configs           []EmailConfig
+	defaultAccount    string
+	intelligentServer *server.IntelligentEmailServer // AI-powered features
 }
 
 func NewEmailServer() *EmailServer {
@@ -179,10 +183,24 @@ func NewEmailServer() *EmailServer {
 		defaultAccount = "default"
 	}
 
-	return &EmailServer{
+	es := &EmailServer{
 		configs:        configs,
 		defaultAccount: defaultAccount,
 	}
+
+	// Initialize intelligent email server (optional - gracefully fails if config missing)
+	dbPath := getEnv("DB_PATH", "./data/emails.db")
+	configPath := getEnv("CONFIG_PATH", "./config/priority_rules.json")
+
+	intelligentServer, err := server.NewIntelligentEmailServer(dbPath, configPath)
+	if err != nil {
+		log.Printf("Warning: Intelligent features disabled (config not found). Basic email features will work normally. Error: %v", err)
+	} else {
+		es.intelligentServer = intelligentServer
+		log.Printf("✅ Intelligent email features enabled (AI classification, priority scoring)")
+	}
+
+	return es
 }
 
 func getEnv(key, defaultValue string) string {
@@ -628,6 +646,112 @@ func main() {
 							},
 						},
 					},
+					// Intelligent email tools (require configuration)
+					{
+						Name:        "classify_email",
+						Description: "Classify an email into categories (work, personal, promotions, invoice, newsletters, urgent) using intelligent rules",
+						InputSchema: map[string]interface{}{
+							"type": "object",
+							"properties": map[string]interface{}{
+								"from": map[string]interface{}{
+									"type":        "string",
+									"description": "Email sender address",
+								},
+								"subject": map[string]interface{}{
+									"type":        "string",
+									"description": "Email subject",
+								},
+								"body_snippet": map[string]interface{}{
+									"type":        "string",
+									"description": "Email body preview (first 500 chars)",
+								},
+							},
+							"required": []string{"from", "subject"},
+						},
+					},
+					{
+						Name:        "priority_inbox",
+						Description: "Get emails sorted by intelligent priority score (0-100). Returns high-priority emails that need attention",
+						InputSchema: map[string]interface{}{
+							"type": "object",
+							"properties": map[string]interface{}{
+								"account": map[string]interface{}{
+									"type":        "string",
+									"description": "Account ID to use (optional, uses default if not specified)",
+								},
+								"min_score": map[string]interface{}{
+									"type":        "number",
+									"description": "Minimum priority score (0-100, default: 70 for high priority)",
+									"minimum":     0,
+									"maximum":     100,
+								},
+								"limit": map[string]interface{}{
+									"type":        "number",
+									"description": "Maximum number of emails to return (default: 20)",
+									"minimum":     1,
+									"maximum":     100,
+								},
+							},
+						},
+					},
+					{
+						Name:        "smart_filter",
+						Description: "Filter emails using intelligent criteria: category, priority score, sender, date range",
+						InputSchema: map[string]interface{}{
+							"type": "object",
+							"properties": map[string]interface{}{
+								"account": map[string]interface{}{
+									"type":        "string",
+									"description": "Account ID to use (optional)",
+								},
+								"category": map[string]interface{}{
+									"type":        "string",
+									"description": "Filter by category (work, personal, promotions, invoice, newsletters, urgent)",
+								},
+								"min_priority": map[string]interface{}{
+									"type":        "number",
+									"description": "Minimum priority score (0-100)",
+									"minimum":     0,
+									"maximum":     100,
+								},
+								"unread_only": map[string]interface{}{
+									"type":        "boolean",
+									"description": "Show only unread emails",
+								},
+								"limit": map[string]interface{}{
+									"type":        "number",
+									"description": "Maximum number of emails to return (default: 50)",
+									"minimum":     1,
+									"maximum":     200,
+								},
+							},
+						},
+					},
+					{
+						Name:        "analyze_priority",
+						Description: "Analyze and explain the priority score of an email with detailed reasoning",
+						InputSchema: map[string]interface{}{
+							"type": "object",
+							"properties": map[string]interface{}{
+								"from": map[string]interface{}{
+									"type":        "string",
+									"description": "Email sender",
+								},
+								"subject": map[string]interface{}{
+									"type":        "string",
+									"description": "Email subject",
+								},
+								"body_snippet": map[string]interface{}{
+									"type":        "string",
+									"description": "Email body preview",
+								},
+								"received_at": map[string]interface{}{
+									"type":        "string",
+									"description": "When email was received (RFC3339 format)",
+								},
+							},
+						},
+					},
 				},
 			}
 
@@ -802,6 +926,67 @@ func (es *EmailServer) handleToolCall(params ToolCallParams) (interface{}, error
 
 		result += strings.Join(allSummaries, "\n\n")
 
+		return ToolResult{
+			Content: []TextContent{{
+				Type: "text",
+				Text: result,
+			}},
+		}, nil
+
+	// Intelligent email tools
+	case "classify_email":
+		if es.intelligentServer == nil {
+			return nil, fmt.Errorf("intelligent features not available - configuration file missing")
+		}
+		result, err := es.intelligentServer.HandleClassifyEmail(params.Arguments)
+		if err != nil {
+			return nil, fmt.Errorf("classification failed: %v", err)
+		}
+		return ToolResult{
+			Content: []TextContent{{
+				Type: "text",
+				Text: result,
+			}},
+		}, nil
+
+	case "priority_inbox":
+		if es.intelligentServer == nil {
+			return nil, fmt.Errorf("intelligent features not available - configuration file missing")
+		}
+		result, err := es.intelligentServer.HandlePriorityInbox(params.Arguments)
+		if err != nil {
+			return nil, fmt.Errorf("priority inbox failed: %v", err)
+		}
+		return ToolResult{
+			Content: []TextContent{{
+				Type: "text",
+				Text: result,
+			}},
+		}, nil
+
+	case "smart_filter":
+		if es.intelligentServer == nil {
+			return nil, fmt.Errorf("intelligent features not available - configuration file missing")
+		}
+		result, err := es.intelligentServer.HandleSmartFilter(params.Arguments)
+		if err != nil {
+			return nil, fmt.Errorf("smart filter failed: %v", err)
+		}
+		return ToolResult{
+			Content: []TextContent{{
+				Type: "text",
+				Text: result,
+			}},
+		}, nil
+
+	case "analyze_priority":
+		if es.intelligentServer == nil {
+			return nil, fmt.Errorf("intelligent features not available - configuration file missing")
+		}
+		result, err := es.intelligentServer.HandleAnalyzePriority(params.Arguments)
+		if err != nil {
+			return nil, fmt.Errorf("priority analysis failed: %v", err)
+		}
 		return ToolResult{
 			Content: []TextContent{{
 				Type: "text",
