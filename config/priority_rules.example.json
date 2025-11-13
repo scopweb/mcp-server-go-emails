@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "version": "1.0",
+  "priority_rules": {
+    "vip_senders": [
+      "boss@company.com",
+      "ceo@company.com",
+      "important-client@example.com"
+    ],
+    "important_domains": [
+      "company.com",
+      "partner.com"
+    ],
+    "urgent_keywords": [
+      "urgent",
+      "asap",
+      "importante",
+      "deadline",
+      "critical",
+      "emergencia",
+      "inmediato",
+      "priority"
+    ],
+    "ignore_senders": [
+      "noreply@*",
+      "*@marketing.com",
+      "notifications@*",
+      "no-reply@*"
+    ],
+    "ignore_subjects": [
+      "newsletter",
+      "unsubscribe",
+      "promoción"
+    ],
+    "category_priority": {
+      "work": 15,
+      "invoice": 20,
+      "personal": 10,
+      "promotions": 0,
+      "newsletters": 0,
+      "urgent": 25
+    },
+    "time_decay": {
+      "enabled": true,
+      "max_age_hours": 168,
+      "decay_rate": 0.05
+    }
+  },
+  "classification_rules": {
+    "work": {
+      "description": "Work-related emails",
+      "conditions": [
+        {
+          "field": "from",
+          "operator": "domain_in",
+          "values": ["company.com", "partner.com"]
+        },
+        {
+          "field": "subject",
+          "operator": "contains_any",
+          "values": ["project", "meeting", "deadline", "task"]
+        }
+      ],
+      "priority_boost": 20,
+      "confidence": 0.95
+    },
+    "invoice": {
+      "description": "Invoices and payments",
+      "conditions": [
+        {
+          "field": "subject",
+          "operator": "regex",
+          "value": "(?i)(invoice|factura|payment|pago|receipt|recibo)"
+        },
+        {
+          "field": "from",
+          "operator": "contains_any",
+          "values": ["billing@", "invoices@", "payments@", "accounting@"]
+        }
+      ],
+      "priority_boost": 50,
+      "confidence": 0.90,
+      "tags": ["financial", "action_required"]
+    },
+    "personal": {
+      "description": "Personal emails",
+      "conditions": [
+        {
+          "field": "from",
+          "operator": "domain_not_in",
+          "values": ["company.com", "partner.com"]
+        },
+        {
+          "field": "to",
+          "operator": "contains",
+          "value": "personal@"
+        }
+      ],
+      "priority_boost": 10,
+      "confidence": 0.80
+    },
+    "promotions": {
+      "description": "Marketing and promotional emails",
+      "conditions": [
+        {
+          "field": "subject",
+          "operator": "contains_any",
+          "values": ["sale", "offer", "discount", "promo", "deal", "% off"]
+        },
+        {
+          "field": "from",
+          "operator": "contains_any",
+          "values": ["marketing@", "promo@", "offers@"]
+        }
+      ],
+      "priority_boost": -20,
+      "confidence": 0.85,
+      "tags": ["marketing", "low_priority"]
+    },
+    "newsletters": {
+      "description": "Newsletters and subscriptions",
+      "conditions": [
+        {
+          "field": "subject",
+          "operator": "contains_any",
+          "values": ["newsletter", "digest", "weekly update"]
+        },
+        {
+          "field": "from",
+          "operator": "contains_any",
+          "values": ["newsletter@", "updates@", "noreply@"]
+        },
+        {
+          "field": "headers",
+          "operator": "contains",
+          "value": "List-Unsubscribe"
+        }
+      ],
+      "priority_boost": -30,
+      "confidence": 0.90,
+      "tags": ["newsletter", "bulk"]
+    },
+    "urgent": {
+      "description": "Urgent emails requiring immediate attention",
+      "conditions": [
+        {
+          "field": "subject",
+          "operator": "regex",
+          "value": "(?i)(urgent|asap|critical|emergency|importante|inmediato)"
+        }
+      ],
+      "priority_boost": 40,
+      "confidence": 0.95,
+      "tags": ["urgent", "high_priority"]
+    }
+  },
+  "learning": {
+    "enabled": true,
+    "min_samples": 10,
+    "adjustment_rate": 0.1,
+    "features": [
+      "sender_engagement",
+      "response_rate",
+      "read_rate",
+      "star_rate"
+    ]
+  },
+  "notifications": {
+    "high_priority_threshold": 80,
+    "critical_threshold": 90,
+    "channels": {
+      "email": {
+        "enabled": false,
+        "recipients": ["your-phone@sms-gateway.com"]
+      },
+      "webhook": {
+        "enabled": false,
+        "urls": [
+          "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+        ]
+      }
+    }
+  }
+}

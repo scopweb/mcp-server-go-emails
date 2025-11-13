@@ -1,6 +1,22 @@
-# MCP Email Server
+# MCP Email Server 🚀
 
-A Model Context Protocol (MCP) server implemented in Go for email management via IMAP/SMTP. Supports multiple email accounts and designed for integration with Claude Desktop.
+A **next-generation** Model Context Protocol (MCP) server implemented in Go for intelligent email management via IMAP/SMTP. Supports multiple email accounts with AI-powered classification, priority detection, and smart summaries.
+
+## 🌟 Vision
+
+Transform email management from reactive to proactive with intelligent automation, helping users focus on what matters most.
+
+### Current Status: **MVP in Development** (v0.5.0)
+
+- ✅ Multi-account support (Gmail, Outlook, Yahoo)
+- ✅ Basic MCP tools (send, read, summarize, delete)
+- ✅ Daily summaries across accounts
+- 🚧 **Coming Soon**: AI classification, priority scoring, smart summaries
+
+For the complete roadmap and technical architecture, see:
+- [ROADMAP.md](ROADMAP.md) - Development plan and timeline
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) - Technical architecture details
+- [RESEARCH.md](RESEARCH.md) - Competitive analysis and market research
 
 ## Features
 
@@ -414,10 +430,61 @@ If something goes wrong:
 - Do not use this software for spam, harassment, or any illegal activities
 - Test thoroughly in development environments before production use
 
+## 🗺️ Roadmap
+
+We're building an intelligent email management system in phases:
+
+### MVP (Current - v0.5.0) - 8 weeks
+- ✅ Multi-account IMAP/SMTP support
+- 🚧 AI-powered email classification
+- 🚧 Priority scoring system (0-100)
+- 🚧 Smart summaries with Claude API
+- 🚧 SQLite caching and analytics
+
+### V1.0 (Production) - 16 weeks
+- Scheduled tasks and automation
+- Webhooks and notifications
+- Full-text search (FTS5)
+- Response templates
+- REST API (optional)
+
+### V2.0 (Advanced) - 24 weeks
+- Semantic search with embeddings
+- Machine learning-based prioritization
+- Thread detection and grouping
+- External integrations (Calendar, Slack)
+- Plugin system
+
+**See [ROADMAP.md](ROADMAP.md) for detailed timeline and technical specifications.**
+
+## 📚 Documentation
+
+- **[ROADMAP.md](ROADMAP.md)** - Complete development roadmap with technical details
+- **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System architecture and design patterns
+- **[RESEARCH.md](RESEARCH.md)** - Market research and competitive analysis
+- **[CHANGELOG.md](CHANGELOG.md)** - Version history and changes
+
+## 🤝 Contributing
+
+We welcome contributions! This project is in active development.
+
+**How to contribute:**
+1. Check out [ROADMAP.md](ROADMAP.md) for planned features
+2. Open an issue to discuss your idea
+3. Submit a pull request
+
+**Areas where we need help:**
+- AI/ML features (classification, priority scoring)
+- Testing and documentation
+- Performance optimization
+- UI/UX for web dashboard
+
 ## License
 
 MIT License
 
-## Contributing
+## 🙏 Acknowledgments
 
-Pull requests and issues are welcome.
+- Built with [go-imap](https://github.com/emersion/go-imap) for IMAP support
+- Powered by [Claude API](https://www.anthropic.com/api) for AI features
+- MCP protocol by [Anthropic](https://www.anthropic.com/)
