@@ -1,0 +1,112 @@
+[
+  {
+    "id": "test-email-1",
+    "from": "ceo@company.com",
+    "to": "user@company.com",
+    "subject": "URGENT: Board Meeting Tomorrow at 9 AM",
+    "body_snippet": "Please prepare the Q4 financial report for tomorrow's board meeting. We need to discuss the budget allocation...",
+    "received_at": "2025-01-13T09:30:00Z",
+    "expected_category": "work",
+    "expected_priority_range": [90, 100],
+    "expected_reasoning": ["VIP sender", "Urgent keyword", "Work domain"]
+  },
+  {
+    "id": "test-email-2",
+    "from": "billing@vendor.com",
+    "to": "user@company.com",
+    "subject": "Invoice #12345 - Payment Due January 15",
+    "body_snippet": "Your invoice is attached. Please process payment by January 15 to avoid late fees...",
+    "received_at": "2025-01-12T14:20:00Z",
+    "expected_category": "invoice",
+    "expected_priority_range": [80, 95],
+    "expected_reasoning": ["Invoice keyword", "Financial", "Action required"]
+  },
+  {
+    "id": "test-email-3",
+    "from": "noreply@marketing.example.com",
+    "to": "user@company.com",
+    "subject": "50% OFF SALE - Limited Time Only!",
+    "body_snippet": "Don't miss out on our biggest sale of the year! Use code SAVE50 for 50% off all items...",
+    "received_at": "2025-01-11T08:15:00Z",
+    "expected_category": "promotions",
+    "expected_priority_range": [0, 20],
+    "expected_reasoning": ["Marketing sender", "Promotional keywords", "Low priority"]
+  },
+  {
+    "id": "test-email-4",
+    "from": "newsletter@techcrunch.com",
+    "to": "user@company.com",
+    "subject": "Daily Tech News Digest - January 12",
+    "body_snippet": "Here are today's top tech stories: AI breakthroughs, new startup funding, industry trends...",
+    "received_at": "2025-01-12T06:00:00Z",
+    "expected_category": "newsletters",
+    "expected_priority_range": [0, 15],
+    "expected_reasoning": ["Newsletter sender", "Digest keyword", "Minimal priority"]
+  },
+  {
+    "id": "test-email-5",
+    "from": "manager@company.com",
+    "to": "user@company.com",
+    "subject": "Re: Project Deadline Extension Request",
+    "body_snippet": "Following up on your request for a deadline extension. Let's discuss this in our 1:1 tomorrow...",
+    "received_at": "2025-01-13T11:45:00Z",
+    "expected_category": "work",
+    "expected_priority_range": [70, 85],
+    "expected_reasoning": ["Work domain", "Reply thread", "Deadline keyword"]
+  },
+  {
+    "id": "test-email-6",
+    "from": "friend@gmail.com",
+    "to": "user@gmail.com",
+    "subject": "Weekend plans?",
+    "body_snippet": "Hey! Want to grab coffee this weekend? Let me know if Saturday works for you...",
+    "received_at": "2025-01-12T18:30:00Z",
+    "expected_category": "personal",
+    "expected_priority_range": [30, 50],
+    "expected_reasoning": ["Personal domain", "Casual tone", "Medium priority"]
+  },
+  {
+    "id": "test-email-7",
+    "from": "security@company.com",
+    "to": "user@company.com",
+    "subject": "CRITICAL: Security Alert - Immediate Action Required",
+    "body_snippet": "We detected unusual activity on your account. Please reset your password immediately and review recent activity...",
+    "received_at": "2025-01-13T10:15:00Z",
+    "expected_category": "urgent",
+    "expected_priority_range": [95, 100],
+    "expected_reasoning": ["Critical keyword", "Security", "Action required", "Very recent"]
+  },
+  {
+    "id": "test-email-8",
+    "from": "hr@company.com",
+    "to": "user@company.com",
+    "subject": "Benefits Enrollment Reminder",
+    "body_snippet": "This is a reminder that benefits enrollment closes on January 20. Please complete your selections...",
+    "received_at": "2025-01-10T09:00:00Z",
+    "expected_category": "work",
+    "expected_priority_range": [50, 70],
+    "expected_reasoning": ["Work domain", "Deadline mentioned", "Several days old"]
+  },
+  {
+    "id": "test-email-9",
+    "from": "notifications@github.com",
+    "to": "user@company.com",
+    "subject": "[scopweb/mcp-server-go-emails] New pull request #42",
+    "body_snippet": "John Doe opened a new pull request: Add intelligent email classification...",
+    "received_at": "2025-01-13T13:20:00Z",
+    "expected_category": "work",
+    "expected_priority_range": [60, 75],
+    "expected_reasoning": ["Work related", "Recent", "Notification"]
+  },
+  {
+    "id": "test-email-10",
+    "from": "accountant@company.com",
+    "to": "user@company.com",
+    "subject": "Expense Report Approved - Reimbursement Processing",
+    "body_snippet": "Your expense report #789 has been approved. Reimbursement will be processed in the next payroll cycle...",
+    "received_at": "2025-01-12T16:45:00Z",
+    "expected_category": "invoice",
+    "expected_priority_range": [55, 70],
+    "expected_reasoning": ["Financial", "Approval notification", "Work domain"]
+  }
+]
